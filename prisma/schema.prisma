@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model TicketName {
+  id                 Int    @id @map("_id")
+  name               String @unique
+  subscription_price Int
+}
+
+model TicketResult {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  date         DateTime
+  draw         Int
+  results      Int[]
+  spetial      String
+  spetial_nums Int[]
+  name         String
+}
+
+model Auth {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  email          String   @unique
+  hash           String
+  first_name     String
+  last_name      String
+  phone          String?
+  phoneValidated Boolean  @default(false)
+  emailValidated Boolean  @default(false)
+  account        Account? @relation(fields: [user_id], references: [id])
+  user_id        String?  @unique @db.ObjectId
+  image          String?
+}
+
+model Account {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  balance       Int             @default(0)
+  email         String          @unique
+  Subscription  Subscription[]
+  Payments      Payments[]
+  TicketsToDrow TicketsToDrow[]
+  TicketHistory TicketHistory[]
+  Auth          Auth?
+}
+
+model Subscription {
+  account      Account  @relation(fields: [user_id], references: [id])
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id      String   @db.ObjectId
+  date         DateTime
+  ticket_id    Int
+  ticket_price Int
+  payment_id   String   @db.ObjectId
+}
+
+model Payments {
+  id      String  @id @default(auto()) @map("_id") @db.ObjectId
+  acc     Account @relation(fields: [user_id], references: [id])
+  user_id String  @db.ObjectId
+  reson   String
+}
+
+model TicketsToDrow {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  acc       Account  @relation(fields: [user_id], references: [id])
+  user_id   String   @db.ObjectId
+  drow_date DateTime
+  ticket_id Int
+  values    String[]
+  spetial   String[]
+  buyDate   DateTime
+}
+
+model TicketHistory {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  acc       Account  @relation(fields: [user_id], references: [id])
+  user_id   String   @db.ObjectId
+  drow_date DateTime
+  ticket_id Int
+  values    String[]
+  spetial   String[]
+  buyDate   DateTime
+}

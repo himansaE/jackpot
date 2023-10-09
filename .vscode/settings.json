@@ -1,0 +1,14 @@
+{
+  "emmet.includeLanguages": {
+    "postcss": "css"
+  },
+  "cSpell.words": [
+    "clsx",
+    "LAGNA",
+    "lucide",
+    "nextauth",
+    "Recaptcha",
+    "Roboto",
+    "tailwindcss"
+  ]
+}
