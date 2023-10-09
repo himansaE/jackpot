@@ -42,7 +42,7 @@ export default function LoginPage() {
       email: form_data.email,
       password: form_data.pass,
       redirect: false,
-      callbackUrl: "/",
+      callbackUrl: "/dashboard",
     });
     if (res?.error === "CredentialsSignin")
       setError("Invalid Username or Password");
