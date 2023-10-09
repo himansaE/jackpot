@@ -10,11 +10,6 @@ export const validateCsrfToken = (token: string) => {
   return validate === requestHash;
 };
 
-type ResponseProps = {
-  statusCode?: number;
-  body: Object;
-};
-
 export const NewResponse = (body: Object | null, statusCode?: number) => {
   return new Response(JSON.stringify(body), { status: statusCode });
 };

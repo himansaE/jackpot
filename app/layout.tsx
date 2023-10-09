@@ -4,7 +4,6 @@ import type { Metadata } from "next";
 import clsx from "clsx";
 import { NavBar } from "@/components/navbar/navbar";
 import { poppins } from "@/lib/fonts";
-import { getServerSession } from "next-auth";
 
 export const metadata: Metadata = {
   title: "Jackpot | Win Your Lottery Today",
@@ -17,7 +16,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerSession();
   return (
     <html
       lang="en"
