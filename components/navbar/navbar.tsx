@@ -2,11 +2,16 @@ import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 import { poppins } from "@/lib/fonts";
-import { getServerSession } from "next-auth";
 import { SignOutNav } from "./signout";
+import { validateSession } from "@/lib/auth";
 
 export const NavBar = async () => {
-  const session = await getServerSession();
+  let session;
+  try {
+    session = await validateSession();
+  } catch (e) {
+    session = null;
+  }
   return (
     <nav
       className={clsx(
@@ -26,7 +31,7 @@ export const NavBar = async () => {
           />
         </Link>
         <ul className="hidden  mx-10 [align-items:center] m-auto md:flex">
-          {session ? (
+          {session != null ? (
             <li>
               <Link
                 href="/dashboard"

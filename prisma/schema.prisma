@@ -10,6 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// public ticket data
 model TicketName {
   id                 Int    @id @map("_id")
   name               String @unique
@@ -26,33 +27,44 @@ model TicketResult {
   name         String
 }
 
-model Auth {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  email          String   @unique
-  hash           String
+// user data
+
+model User {
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
+  email          String  @unique
   first_name     String
   last_name      String
   phone          String?
-  phoneValidated Boolean  @default(false)
-  emailValidated Boolean  @default(false)
-  account        Account? @relation(fields: [user_id], references: [id])
-  user_id        String?  @unique @db.ObjectId
+  phoneValidated Boolean @default(false)
+  emailValidated Boolean @default(false)
   image          String?
-}
+  acc_bal        Int     @default(0)
 
-model Account {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  balance       Int             @default(0)
-  email         String          @unique
+  auth_session  Session[]
+  key           Key[]
   Subscription  Subscription[]
   Payments      Payments[]
   TicketsToDrow TicketsToDrow[]
   TicketHistory TicketHistory[]
-  Auth          Auth?
+}
+
+model Session {
+  id             String @id @map("_id")
+  user_id        String @db.ObjectId
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+}
+
+model Key {
+  id              String  @id @map("_id")
+  hashed_password String?
+  user_id         String  @db.ObjectId
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 }
 
 model Subscription {
-  account      Account  @relation(fields: [user_id], references: [id])
+  account      User     @relation(fields: [user_id], references: [id])
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   user_id      String   @db.ObjectId
   date         DateTime
@@ -62,15 +74,15 @@ model Subscription {
 }
 
 model Payments {
-  id      String  @id @default(auto()) @map("_id") @db.ObjectId
-  acc     Account @relation(fields: [user_id], references: [id])
-  user_id String  @db.ObjectId
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  acc     User   @relation(fields: [user_id], references: [id])
+  user_id String @db.ObjectId
   reson   String
 }
 
 model TicketsToDrow {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  acc       Account  @relation(fields: [user_id], references: [id])
+  acc       User     @relation(fields: [user_id], references: [id])
   user_id   String   @db.ObjectId
   drow_date DateTime
   ticket_id Int
@@ -81,7 +93,7 @@ model TicketsToDrow {
 
 model TicketHistory {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  acc       Account  @relation(fields: [user_id], references: [id])
+  acc       User     @relation(fields: [user_id], references: [id])
   user_id   String   @db.ObjectId
   drow_date DateTime
   ticket_id Int

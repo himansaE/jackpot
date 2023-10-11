@@ -2,6 +2,7 @@ import { Page404 } from "@/components/ui/404";
 import { unfiltered_upcoming_lottery_data } from "@/lib/filter-data";
 import { BuyLotteryClient } from "./buy-client";
 import { DashBoardCard } from "@/components/dashboard/card";
+import { validateSession } from "@/lib/auth";
 
 const LOTTERIES = [
   "mahajana sampatha",
@@ -73,6 +74,7 @@ export default function Page({
 }
 
 const PageRender = async (props: { name: string }) => {
+  await validateSession();
   const data = unfiltered_upcoming_lottery_data(
     await fetch("https://client-proxy.lucky1.lk/api/v1/lottery/ongoing", {
       method: "get",

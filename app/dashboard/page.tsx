@@ -2,19 +2,16 @@ import { AccountCard } from "@/components/dashboard/account-summery";
 import { TicketSummary } from "@/components/dashboard/ticket-summary";
 import { UpcomingCard } from "@/components/dashboard/upcoming";
 import { YourTicketCard } from "@/components/dashboard/your-tickets";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { validateSession } from "@/lib/auth";
 
 export default async function Page() {
-  const session = await getServerSession();
-
-  if (session == null) redirect("/auth/login");
-
+  const session = await validateSession();
+  if (!session) return "";
   return (
     <div className="flex gap-8 flex-col my-6">
       <div>
         <h1 className="text-4xl font-semibold my-1">
-          Hello {session?.user.name}!
+          Hello {`${session.user.first_name} ${session.user.last_name}`}!
         </h1>
         <h2 className="text-gray-800 dark:text-gray-300">
           Welcome to Dashboard.
@@ -30,10 +27,4 @@ export default async function Page() {
       </div>
     </div>
   );
-}
-
-export interface User {
-  email: string;
-  name: string;
-  image: string | null | undefined;
 }

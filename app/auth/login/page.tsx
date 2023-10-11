@@ -1,5 +1,5 @@
 import LoginPage from "./login";
-import { getServerSession } from "next-auth";
+import { isLogged } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
 export default async function Page({
@@ -7,8 +7,7 @@ export default async function Page({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  if (!(await getServerSession())) return <LoginPage />;
+  if (!(await isLogged())) return <LoginPage />;
   const url = searchParams["callbackUrl"];
-
   redirect(url ?? "/dashboard");
 }

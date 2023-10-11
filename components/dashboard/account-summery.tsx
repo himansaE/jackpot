@@ -7,14 +7,9 @@ import {
   SelectValue,
 } from "../ui/select";
 import { DashBoardCard } from "./card";
-import { User } from "@/app/dashboard/page";
-import prisma from "@/lib/prisma";
+import { User } from "lucia";
 
 export const AccountCard = async ({ user }: { user: User }) => {
-  const acc = await prisma.account.findFirst({
-    where: { email: user.email },
-  });
-  if (!acc) return <></>;
   const data = [
     { name: "Monthly Earnings", val: "Rs.4000", percent: "25%", grow: true },
     { name: "Monthly Spent", val: "Rs.3500", percent: "30%", grow: false },
@@ -40,7 +35,7 @@ export const AccountCard = async ({ user }: { user: User }) => {
       <div className="my-8 text-center">
         <div className="text-sm text-gray-400">Account Balance</div>
         <div className={`${roboto_mono.className} text-4xl my-3`}>
-          Rs.{acc.balance.toString().padStart(2, "0")}.00
+          Rs.{user.acc_bal.toString().padStart(2, "0")}.00
         </div>
       </div>
       <div className="flex w-full h-full bg-indigo-100 dark:bg-[#0d0f19] rounded-md px-6 py-6 text-gray-900 dark:text-gray-300">

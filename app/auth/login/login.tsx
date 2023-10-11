@@ -9,7 +9,6 @@ import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 import { ReactNode, useState } from "react";
 import Image from "next/image";
-import { signIn } from "next-auth/react";
 
 type FormData = {
   email: string;
@@ -36,22 +35,28 @@ export default function LoginPage() {
   };
 
   const submit = async () => {
-    if (!validate()) setError("Provide Username and Password to Login.");
+    if (submitting) return;
+    if (!validate()) return setError("Provide Username and Password to Login.");
     setSubmitting(true);
-    const res = await signIn("credentials", {
-      email: form_data.email,
-      password: form_data.pass,
-      redirect: false,
-      callbackUrl: "/dashboard",
-    });
-    if (res?.error === "CredentialsSignin")
-      setError("Invalid Username or Password");
-    else {
-      const url = new URLSearchParams(window.location.search).get(
-        "callbackUrl"
-      );
-      window.location.assign(url ?? "/dashboard");
-    }
+    setError("");
+
+    window.location.assign("/dashboard");
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({
+          email: form_data.email,
+          password: form_data.pass,
+        }),
+      }).then((r) => r.json());
+
+      if (res.done) {
+        return window.location.assign("/dashboard");
+      } else
+        setError(
+          (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>)
+        );
+    } catch {}
     setSubmitting(false);
   };
 

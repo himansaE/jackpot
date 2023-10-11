@@ -4,10 +4,13 @@ import {
   UpcomingLotteryCardSkeleton,
 } from "@/components/dashboard/upcoming";
 import { Lottie } from "@/components/ui/lottie";
+import { validateSession } from "@/lib/auth";
 import { unfiltered_upcoming_lottery_data } from "@/lib/filter-data";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 
 async function Page() {
+  const session = await validateSession();
+  if (!session) return "";
   return (
     <div>
       <h1 className="text-4xl font-semibold">
@@ -61,7 +64,9 @@ const UpcomingLotteries = async () => {
   return (
     <>
       {sorted_data.map((i) => (
-        <>{i.id && <UpcomingLotteryCard key={`${i.name}${i.id}`} {...i} />}</>
+        <Fragment key={`${i.id}-${i.name}`}>
+          {i.id && <UpcomingLotteryCard key={`${i.name}${i.id}`} {...i} />}
+        </Fragment>
       ))}
     </>
   );

@@ -9,7 +9,6 @@ import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 import { FormEvent, ReactNode, useState } from "react";
 import { ReCaptchaProvider, useReCaptcha } from "next-recaptcha-v3";
-import { signIn } from "next-auth/react";
 
 type FormData = {
   f_name: string;
@@ -33,7 +32,6 @@ export function Page() {
 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<ReactNode>("");
-
   const setValue = (id: keyof FormData, value: string) => {
     setFormData({ ...form_data, [id]: value });
   };
@@ -60,10 +58,13 @@ export function Page() {
       token = await executeRecaptcha("register");
     } catch (err) {}
 
-    if (token == undefined)
+    if (token == undefined) {
+      setSubmitting(false);
+
       return setError("Recaptcha has not been loaded. Try reload the page.");
+    }
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         body: JSON.stringify({
           token,
@@ -74,27 +75,15 @@ export function Page() {
           phone: form_data.phone,
         }),
       }).then((r) => r.json());
-      if (!res.done)
+
+      if (res.done) {
+        return window.location.assign("/dashboard");
+      } else
         setError(
           (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>)
         );
-      else {
-        await signIn("credentials", {
-          email: form_data.email,
-          password: form_data.pass,
-          redirect: false,
-          callbackUrl: "/",
-        });
-        const url = new URLSearchParams(window.location.search).get(
-          "callbackUrl"
-        );
-        window.location.assign(url ?? "/dashboard");
-      }
-    } catch (e) {
-      setError("Something went wrong. Try again.");
-    } finally {
-      setSubmitting(false);
-    }
+    } catch {}
+    setSubmitting(false);
   };
   return (
     <>
