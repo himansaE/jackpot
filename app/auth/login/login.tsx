@@ -7,7 +7,7 @@ import { OrLine } from "@/components/ui/or-line";
 import { ProviderButton } from "@/components/ui/provider-button";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 import Image from "next/image";
 
 type FormData = {
@@ -34,13 +34,13 @@ export default function LoginPage() {
     return false;
   };
 
-  const submit = async () => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (submitting) return;
     if (!validate()) return setError("Provide Username and Password to Login.");
     setSubmitting(true);
     setError("");
 
-    window.location.assign("/dashboard");
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -114,10 +114,7 @@ export default function LoginPage() {
             className={`flex flex-col gap-5 my-3 md:mx-6 ${
               submitting ? "opacity-80" : ""
             }`}
-            onSubmit={(e) => {
-              e.preventDefault();
-              submit();
-            }}
+            onSubmit={submit}
           >
             {error != "" && (
               <div className="text-red-500 mb-[-1em]">{error}</div>
