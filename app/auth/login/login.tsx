@@ -8,7 +8,6 @@ import { ProviderButton } from "@/components/ui/provider-button";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 import { FormEvent, ReactNode, useState } from "react";
-import Image from "next/image";
 
 type FormData = {
   email: string;
@@ -54,7 +53,7 @@ export default function LoginPage() {
         return window.location.assign("/dashboard");
       } else
         setError(
-          (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>)
+          (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>),
         );
     } catch {}
     setSubmitting(false);
@@ -62,30 +61,23 @@ export default function LoginPage() {
 
   return (
     <>
-      <h1 className="my-3 text-3xl md:mx-6 flex gap-x-3 items-center flex-wrap sm:px-0 font-medium mb-5 sm:mb-0">
-        Welcome to{" "}
-        <Image
-          className="dark:invert dark:hue-rotate-[135deg] dark:contrast-150 elative z-[-1] w-auto "
-          src="/static/images/logo_inline.svg"
-          alt="logo"
-          height={45}
-          width={188}
-        />
+      <h1 className="flex flex-wrap items-center gap-x-3 text-3xl font-medium sm:mb-0 sm:px-0 md:mx-6">
+        Welcome to Jackpot
       </h1>
       <p className="text-sm font-medium text-gray-500 dark:text-gray-400 md:mx-6">
         Create your account, and test your luck today.
       </p>
 
-      <div className="m-5 font-medium">
+      <div className="my-5 font-medium md:mx-6">
         Don&apos;t have an Account{" "}
         <Link className="text-blue-500 underline" href={"/auth/register"}>
           Register here
         </Link>
         .
       </div>
-      <div className="md:grid md:[grid-template-columns:1fr_20px_1fr] my-3  md:my-5">
+      <div className="my-3 md:my-5 md:grid  md:[grid-template-columns:1fr_20px_1fr]">
         <div className="[grid-column:3]">
-          <Center className="flex flex-col gap-5 mt-10 mb-12 md:mt-26 ">
+          <Center className="md:mt-26 mb-12 mt-10 flex flex-col gap-5 ">
             <h2 className="text-xl font-medium text-gray-700  dark:text-gray-300">
               Log In Using
             </h2>
@@ -106,18 +98,18 @@ export default function LoginPage() {
         <div className="[grid-column:2] [grid-row:1]">
           <OrLine />
         </div>
-        <div className="[grid-column:1] [grid-row:1] mx-3 md:mx-0">
-          <h2 className="mt-8 mb-6 text-xl font-medium md:hidden">
+        <div className="mx-3 [grid-row:1] [grid-column:1] md:mx-0">
+          <h2 className="mb-6 mt-8 text-xl font-medium md:hidden">
             Enter your Username and Password to Log in.
           </h2>
           <form
-            className={`flex flex-col gap-5 my-3 md:mx-6 ${
+            className={`my-3 flex flex-col gap-5 md:mx-6 ${
               submitting ? "opacity-80" : ""
             }`}
             onSubmit={submit}
           >
             {error != "" && (
-              <div className="text-red-500 mb-[-1em]">{error}</div>
+              <div className="mb-[-1em] text-red-500">{error}</div>
             )}
 
             <InputBox
@@ -139,7 +131,7 @@ export default function LoginPage() {
               disabled={submitting}
             />
 
-            <div className="flex space-x-2 items-top">
+            <div className="items-top flex space-x-2">
               {/* TODO:: Implement remember me functionality */}
               <Checkbox id="terms1" disabled={submitting} />
 

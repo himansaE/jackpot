@@ -2,77 +2,86 @@ import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 import { poppins } from "@/lib/fonts";
-import { SignOutNav } from "./signout";
 import { validateSession } from "@/lib/auth";
+import { SideNav } from "./side-nav";
+import { SideNavController } from "./side-nav-controller";
+import { Fragment } from "react";
+import { Session } from "lucia";
+
+export enum NavType {
+  Any,
+  LoggedIn,
+  NotLoggedIn,
+}
+
+export const NAV_LINKS: [string, string, NavType][] = [
+  ["Home", "/", NavType.Any],
+  ["Dashboard", "/dashboard", NavType.LoggedIn],
+  ["Buy Lotteries", "/dashboard/buy", NavType.LoggedIn],
+  ["Results", "/results", NavType.Any],
+  ["Login", "/auth/login", NavType.NotLoggedIn],
+  ["Register", "/auth/register", NavType.NotLoggedIn],
+];
 
 export const NavBar = async () => {
-  let session;
+  let session: boolean | Session;
   try {
     session = await validateSession();
   } catch (e) {
-    session = null;
+    session = false;
   }
   return (
     <nav
       className={clsx(
         poppins.className,
-        "flex px-4 py-2 [background-color:#ffffff87] backdrop-blur-xl shadow-lg font-medium select-none justify-center sticky top-0 dark:bg-[#1e2f567d] z-20"
+        "sticky top-0 z-20 flex select-none justify-center px-4 py-2 font-medium shadow-lg backdrop-blur-xl [background-color:#ffffff87] dark:bg-[#1e2f567d]",
       )}
     >
-      <div className="mx-1 w-full flex ">
+      <div className="z-50 mx-1 flex w-full ">
         <Link href="/">
           <Image
-            className="dark:invert dark:hue-rotate-[135deg] dark:contrast-150 transition duration-300"
+            className="transition duration-300 dark:contrast-150 dark:hue-rotate-[135deg] dark:invert"
             src={"/static/images/logo_inline.svg"}
-            height={45}
-            width={188}
+            height={40.69}
+            width={170}
             alt="Jackpot Logo"
             priority
           />
         </Link>
-        <ul className="hidden  mx-10 [align-items:center] m-auto md:flex">
-          {session != null ? (
-            <li>
-              <Link
-                href="/dashboard"
-                className="px-2 py-1 rounded focus:outline-none focus:ring focus:ring-blue-300 hover:underline"
-              >
-                Dashboard
-              </Link>
-            </li>
-          ) : (
-            nav_items.map((i) => (
-              <li key={i.name} className="mx-2">
-                <Link
-                  href={i.url}
-                  className="px-2 py-1 rounded focus:outline-none focus:ring focus:ring-blue-300 hover:underline"
-                >
-                  {i.name}
-                </Link>
-              </li>
-            ))
-          )}
+        <ul className="m-auto  mx-10 ml-14 hidden gap-x-2 [align-items:center] md:flex">
+          {NAV_LINKS.map((i) => (
+            <Fragment key={i[0]}>
+              {i[2] === NavType.Any ||
+              (i[2] === NavType.NotLoggedIn &&
+                session == false &&
+                i[0] != "Register") ||
+              (i[2] === NavType.LoggedIn && session != false) ? (
+                <li key={i[0]}>
+                  <Link
+                    className="rounded px-2 py-1 hover:underline focus:outline-none focus:ring focus:ring-blue-300"
+                    href={i[1]}
+                  >
+                    {i[0]}
+                  </Link>
+                </li>
+              ) : (
+                <></>
+              )}
+            </Fragment>
+          ))}
         </ul>
-        {session ? (
-          <SignOutNav />
-        ) : (
+        {!session && (
           <Link
-            className="bg-slate-800 text-white px-5 ml-auto rounded-md hover:bg-slate-900 focus:outline-none focus:ring focus:ring-blue-300 whitespace-nowrap dark:hover:bg-indigo-900 transition-colors flex items-center"
-            href="/auth/login"
+            className="ml-auto hidden items-center whitespace-nowrap rounded-md bg-slate-800 px-5 text-white transition-colors hover:bg-slate-900 focus:outline-none focus:ring focus:ring-blue-300 dark:hover:bg-indigo-900 x-sm:flex "
+            href="/auth/register"
           >
-            Login
+            Try Now
           </Link>
         )}
       </div>
+      <SideNavController>
+        <SideNav user={typeof session === "boolean" ? null : session.user} />
+      </SideNavController>
     </nav>
   );
 };
-
-const nav_items: {
-  name: string;
-  url: string;
-}[] = [
-  { name: "Lotteries", url: "/lotteries" },
-  { name: "Results", url: "/results" },
-  { name: "Tools", url: "/tools" },
-];

@@ -20,10 +20,18 @@ export const formatMilliseconds = (milliseconds: number) => {
     .map(([unit, divisor]) => {
       const value: number = Math.floor(milliseconds / divisor);
       milliseconds %= divisor;
-      return value > 0 ? `${value} ${unit}${value !== 1 ? "s" : ""}` : null;
+      return value > 0 ? `${value}${unit}` : null;
     })
     .filter(Boolean)
-    .join("  ");
+    .join(" ");
 
   return formattedTime || "0 seconds";
 };
+
+export function getNumberWithSuffix(number: number) {
+  const suffix = ["th", "st", "nd", "rd"][number % 10] || "th";
+  if (number % 100 >= 11 && number % 100 <= 13) {
+    return number + "th";
+  }
+  return suffix;
+}

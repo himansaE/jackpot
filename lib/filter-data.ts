@@ -36,7 +36,7 @@ export const filter_lottery_data = (data: any): LotteryCardProps[] => {
 };
 
 export interface UpcomingCardProps {
-  id: string;
+  id: number;
   name: string;
   price: string;
   time: string;
@@ -46,7 +46,7 @@ export interface UpcomingCardProps {
 }
 
 export const filter_upcoming_lottery_data = (
-  data: any
+  data: any,
 ): UpcomingCardProps[] | undefined => {
   if (data == undefined) return undefined;
   const new_data = [];
@@ -68,7 +68,7 @@ export const filter_upcoming_lottery_data = (
 };
 
 export const unfiltered_upcoming_lottery_data = (
-  data: any
+  data: any,
 ): UpcomingCardProps[] | undefined => {
   if (data == undefined) return undefined;
   const new_data = [];

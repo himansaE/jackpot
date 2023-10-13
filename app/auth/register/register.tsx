@@ -80,29 +80,29 @@ export function Page() {
         return window.location.assign("/dashboard");
       } else
         setError(
-          (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>)
+          (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>),
         );
     } catch {}
     setSubmitting(false);
   };
   return (
     <>
-      <h1 className="my-3 mb-1 text-3xl items-center sm:px-0 font-medium">
-        Welcome to Jackpot
+      <h1 className="items-center text-3xl font-medium sm:px-0 md:mx-6">
+        Welcome to <span className="font">Jackpot</span>
       </h1>
       <p className="text-sm font-medium text-gray-500 dark:text-gray-400 md:mx-6">
         Create your account, and test your luck today.
       </p>
-      <div className="m-5 mt-7 font-medium">
+      <div className="my-5 mt-7 font-medium md:mx-6">
         Already have an Account{" "}
         <Link className="text-blue-500 underline" href={"/auth/login"}>
           Login here
         </Link>
         .
       </div>
-      <div className="md:grid md:[grid-template-columns:1fr_20px_1fr] my-3  md:my-5">
+      <div className="my-3 md:my-5 md:grid  md:[grid-template-columns:1fr_20px_1fr]">
         <div className="[grid-column:3] ">
-          <Center className="flex flex-col gap-5 mt-10 mb-12 md:mt-26 ">
+          <Center className="md:mt-26 mb-12 mt-10 flex flex-col gap-5 ">
             <h2 className="text-xl font-medium text-gray-700 dark:text-gray-300">
               Sign Up Using
             </h2>
@@ -123,16 +123,16 @@ export function Page() {
         <div className="[grid-column:2] [grid-row:1]">
           <OrLine />
         </div>
-        <div className="[grid-column:1] [grid-row:1] mx-3 md:mx-0">
-          <h2 className="mt-8 mb-6 text-xl font-medium md:hidden">
+        <div className="mx-3 [grid-row:1] [grid-column:1] md:mx-0">
+          <h2 className="mb-6 mt-8 text-xl font-medium md:hidden">
             Fill This form to complete the Registration
           </h2>
           {error != "" && (
-            <div className="text-red-200 mx-0 md:mx-3 my-10 mb-5 border border-solid border-[#ff10102e] bg-red-950 rounded-md px-8 py-2 text-sm">
+            <div className="mx-0 my-10 mb-5 rounded-md border border-solid border-[#ff10102e] bg-red-950 px-8 py-2 text-sm text-red-200 md:mx-3">
               {error}
             </div>
           )}
-          <form className="flex flex-col gap-5 my-3 md:mx-6" onSubmit={submit}>
+          <form className="my-3 flex flex-col gap-5 md:mx-6" onSubmit={submit}>
             <div className="flex flex-row gap-3 [&>div]:w-full">
               <InputBox
                 name="First Name"
@@ -185,12 +185,12 @@ export function Page() {
               type="password"
               disabled={submitting}
             />
-            <div className="flex space-x-2 items-top">
+            <div className="items-top flex space-x-2">
               <Checkbox id="terms1" required disabled={submitting} />
               <div className="grid gap-1.5 leading-none">
                 <label
                   htmlFor="terms1"
-                  className="text-sm font-medium leading-none cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                   Accept terms and conditions
                 </label>
@@ -205,7 +205,7 @@ export function Page() {
           </form>
         </div>
       </div>
-      <p className="text-xs text-gray-700 dark:text-gray-400 mx-2 mt-8 ">
+      <p className="mx-2 mt-8 text-xs text-gray-700 dark:text-gray-400 ">
         This site is protected by reCAPTCHA and the Google
         <a
           href="https://policies.google.com/privacy"
