@@ -60,57 +60,37 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      <h1 className="flex flex-wrap items-center gap-x-3 text-3xl font-medium sm:mb-0 sm:px-0 md:mx-6">
-        Welcome to Jackpot
-      </h1>
-      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 md:mx-6">
-        Create your account, and test your luck today.
-      </p>
+    <div className="grid sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">
+      <div className="lg:mt-20">
+        <div className="lg:sticky lg:top-28">
+          <h1 className="flex flex-wrap items-center gap-x-3 text-3xl font-semibold">
+            Welcome to Jackpot
+          </h1>
+          <p className=" text-sm font-medium text-gray-500 dark:text-gray-400 lg:block">
+            Create your account, and test your luck today.
+          </p>
 
-      <div className="my-5 font-medium md:mx-6">
-        Don&apos;t have an Account{" "}
-        <Link className="text-blue-500 underline" href={"/auth/register"}>
-          Register here
-        </Link>
-        .
+          <div className="my-5 font-medium ">
+            Don&apos;t have an Account{" "}
+            <Link className="text-blue-500 underline" href={"/auth/register"}>
+              Register here
+            </Link>
+            .
+          </div>
+        </div>
       </div>
-      <div className="my-3 md:my-5 md:grid  md:[grid-template-columns:1fr_20px_1fr]">
-        <div className="[grid-column:3]">
-          <Center className="md:mt-26 mb-12 mt-10 flex flex-col gap-5 ">
-            <h2 className="text-xl font-medium text-gray-700  dark:text-gray-300">
-              Log In Using
-            </h2>
-            <ProviderButton
-              name="Google"
-              type="in"
-              action={() => {}}
-              icon="/static/images/g_logo.svg"
-            />
-            <ProviderButton
-              name="Apple"
-              type="in"
-              action={() => {}}
-              icon="/static/images/apple_logo.svg"
-            />
-          </Center>
-        </div>
-        <div className="[grid-column:2] [grid-row:1]">
-          <OrLine />
-        </div>
-        <div className="mx-3 [grid-row:1] [grid-column:1] md:mx-0">
-          <h2 className="mb-6 mt-8 text-xl font-medium md:hidden">
-            Enter your Username and Password to Log in.
+      <div className="w-full max-w-xl">
+        <div>
+          <h2 className="my-6 text-lg font-medium">
+            Enter your Email and Password to Log in.
           </h2>
           <form
-            className={`my-3 flex flex-col gap-5 md:mx-6 ${
+            className={`my-3 flex flex-col gap-5 ${
               submitting ? "opacity-80" : ""
             }`}
             onSubmit={submit}
           >
-            {error != "" && (
-              <div className="mb-[-1em] text-red-500">{error}</div>
-            )}
+            {error != "" && <div className="text-red-500">{error}</div>}
 
             <InputBox
               name="Email"
@@ -133,7 +113,7 @@ export default function LoginPage() {
 
             <div className="items-top flex space-x-2">
               {/* TODO:: Implement remember me functionality */}
-              <Checkbox id="terms1" disabled={submitting} />
+              <Checkbox id="terms1" disabled={submitting} name="remember-me" />
 
               <div className="grid gap-1.5 leading-none">
                 <label
@@ -144,13 +124,31 @@ export default function LoginPage() {
                 </label>
               </div>
             </div>
-            <Button className="mt-2">
+            <Button className="dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-800">
               {submitting ? <Spinner /> : <></>}
               Log In
             </Button>
           </form>
         </div>
+        <OrLine />
+        <h2 className="mb-6 text-lg font-medium">Login Using</h2>
+        <div>
+          <Center className="flex flex-col gap-5">
+            <ProviderButton
+              name="Google"
+              type="in"
+              action={() => {}}
+              icon="/static/images/g_logo.svg"
+            />
+            <ProviderButton
+              name="Apple"
+              type="in"
+              action={() => {}}
+              icon="/static/images/apple_logo.svg"
+            />
+          </Center>
+        </div>
       </div>
-    </>
+    </div>
   );
 }

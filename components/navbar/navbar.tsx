@@ -15,7 +15,6 @@ export enum NavType {
 }
 
 export const NAV_LINKS: [string, string, NavType][] = [
-  ["Home", "/", NavType.Any],
   ["Dashboard", "/dashboard", NavType.LoggedIn],
   ["Buy Lotteries", "/dashboard/buy", NavType.LoggedIn],
   ["Results", "/results", NavType.Any],

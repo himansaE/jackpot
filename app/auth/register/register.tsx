@@ -86,45 +86,27 @@ export function Page() {
     setSubmitting(false);
   };
   return (
-    <>
-      <h1 className="items-center text-3xl font-medium sm:px-0 md:mx-6">
-        Welcome to <span className="font">Jackpot</span>
-      </h1>
-      <p className="text-sm font-medium text-gray-500 dark:text-gray-400 md:mx-6">
-        Create your account, and test your luck today.
-      </p>
-      <div className="my-5 mt-7 font-medium md:mx-6">
-        Already have an Account{" "}
-        <Link className="text-blue-500 underline" href={"/auth/login"}>
-          Login here
-        </Link>
-        .
+    <div className="grid sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">
+      <div className="lg:mt-20">
+        <div className="lg:sticky lg:top-28">
+          <h1 className="flex flex-wrap items-center gap-x-3 text-3xl font-semibold">
+            Welcome to Jackpot
+          </h1>
+          <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+            Create your account, and test your luck today.
+          </p>
+          <div className="my-5 font-medium">
+            Already have an Account{" "}
+            <Link className="text-blue-500 underline" href={"/auth/login"}>
+              Login here
+            </Link>
+            .
+          </div>
+        </div>
       </div>
-      <div className="my-3 md:my-5 md:grid  md:[grid-template-columns:1fr_20px_1fr]">
-        <div className="[grid-column:3] ">
-          <Center className="md:mt-26 mb-12 mt-10 flex flex-col gap-5 ">
-            <h2 className="text-xl font-medium text-gray-700 dark:text-gray-300">
-              Sign Up Using
-            </h2>
-            <ProviderButton
-              name="Google"
-              type="up"
-              action={() => {}}
-              icon="/static/images/g_logo.svg"
-            />
-            <ProviderButton
-              name="Apple"
-              type="up"
-              action={() => {}}
-              icon="/static/images/apple_logo.svg"
-            />
-          </Center>
-        </div>
-        <div className="[grid-column:2] [grid-row:1]">
-          <OrLine />
-        </div>
-        <div className="mx-3 [grid-row:1] [grid-column:1] md:mx-0">
-          <h2 className="mb-6 mt-8 text-xl font-medium md:hidden">
+      <div className="w-full max-w-xl">
+        <div>
+          <h2 className="my-6 text-lg font-medium">
             Fill This form to complete the Registration
           </h2>
           {error != "" && (
@@ -132,7 +114,7 @@ export function Page() {
               {error}
             </div>
           )}
-          <form className="my-3 flex flex-col gap-5 md:mx-6" onSubmit={submit}>
+          <form className="my-3 flex flex-col gap-5" onSubmit={submit}>
             <div className="flex flex-row gap-3 [&>div]:w-full">
               <InputBox
                 name="First Name"
@@ -199,32 +181,50 @@ export function Page() {
                 </p>
               </div>
             </div>
-            <Button className="mt-2 ">
+            <Button className="dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-800">
               {submitting ? <Spinner /> : <></>}Sign Up
             </Button>
           </form>
         </div>
+        <OrLine />
+        <div>
+          <h2 className="mb-6 text-lg font-medium">Sign Up Using</h2>
+          <Center className="flex flex-col gap-5">
+            <ProviderButton
+              name="Google"
+              type="up"
+              action={() => {}}
+              icon="/static/images/g_logo.svg"
+            />
+            <ProviderButton
+              name="Apple"
+              type="up"
+              action={() => {}}
+              icon="/static/images/apple_logo.svg"
+            />
+          </Center>
+        </div>
+        <p className="mx-2 mt-8 text-xs text-gray-700 dark:text-gray-400 ">
+          This site is protected by reCAPTCHA and the Google
+          <a
+            href="https://policies.google.com/privacy"
+            className="text-blue-600 underline"
+          >
+            {" "}
+            Privacy Policy{" "}
+          </a>
+          and
+          <a
+            href="https://policies.google.com/terms"
+            className="text-blue-600 underline"
+          >
+            {" "}
+            Terms of Service{" "}
+          </a>
+          apply.
+        </p>
       </div>
-      <p className="mx-2 mt-8 text-xs text-gray-700 dark:text-gray-400 ">
-        This site is protected by reCAPTCHA and the Google
-        <a
-          href="https://policies.google.com/privacy"
-          className="text-blue-600 underline"
-        >
-          {" "}
-          Privacy Policy{" "}
-        </a>
-        and
-        <a
-          href="https://policies.google.com/terms"
-          className="text-blue-600 underline"
-        >
-          {" "}
-          Terms of Service{" "}
-        </a>
-        apply.
-      </p>
-    </>
+    </div>
   );
 }
 

@@ -5,10 +5,8 @@ export default function Center(props: {
   children: ReactElement | ReactElement[];
 }) {
   return (
-    <div className="flex w-full justify-center items-center">
-      <div className={`w-full px mx-6 ${props.className ?? ""}`}>
-        {props.children}
-      </div>
+    <div className="flex w-full items-center justify-center">
+      <div className={` w-full ${props.className ?? ""}`}>{props.children}</div>
     </div>
   );
 }

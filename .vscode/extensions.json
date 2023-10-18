@@ -2,7 +2,6 @@
   "recommendations": [
     "heybourn.headwind",
     "bradlc.vscode-tailwindcss",
-    "stivo.tailwind-fold",
     "ms-vscode.vscode-typescript-next",
     "csstools.postcss"
   ]

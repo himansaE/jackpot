@@ -1,7 +1,7 @@
 export const OrLine = () => (
-  <div className="flex items-center justify-between md:flex-col md:h-full md:max-h-[80vh] text-gray-500">
-    <div className="w-[calc(50%_-_20px)] h-[1.6px] md:h-[calc(50%_-_20px)] md:w-[1.5px] bg-slate-300 opacity-50 z-[-1]"></div>
+  <div className="my-8 flex items-center  justify-between text-gray-500">
+    <div className="z-[-1] h-[1.6px]  w-[calc(50%_-_20px)] bg-slate-300 opacity-50 dark:opacity-10"></div>
     or
-    <div className="w-[calc(50%_-_20px)] h-[1.6px] md:h-[calc(50%_-_20px)] md:w-[1.5px] bg-slate-300 opacity-50 z-[-1]"></div>
+    <div className="z-[-1] h-[1.6px] w-[calc(50%_-_20px)] bg-slate-300 opacity-50 dark:opacity-10"></div>
   </div>
 );
