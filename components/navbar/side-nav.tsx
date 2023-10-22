@@ -17,7 +17,7 @@ export const SideNav = ({ user }: { user: User | null }) => {
           </p>
           <Link
             href="/auth/login"
-            className="focus:ring-sky-500-100 focus:ring-sky-000 my-3 w-full max-w-xs rounded-full bg-violet-500 py-1.5 text-indigo-50 outline-none transition-colors hover:bg-opacity-80 focus:ring-2 dark:bg-violet-700"
+            className="focus:ring-sky-500-100 focus:ring-sky-000 my-3 w-full max-w-xs rounded-full bg-violet-500 py-1.5 text-indigo-50 outline-none transition-colors hover:bg-opacity-80 focus:ring-2  dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-800"
           >
             Log In
           </Link>

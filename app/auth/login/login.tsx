@@ -1,13 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Center from "@/components/ui/center";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputBox } from "@/components/ui/input-box";
 import { OrLine } from "@/components/ui/or-line";
-import { ProviderButton } from "@/components/ui/provider-button";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 import { FormEvent, ReactNode, useState } from "react";
+import Image from "next/image";
+import { LoginProviders } from "@/components/login-providers";
 
 type FormData = {
   email: string;
@@ -60,9 +60,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="grid sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">
-      <div className="lg:mt-20">
-        <div className="lg:sticky lg:top-28">
+    <div className="grid min-h-[calc(100vh_-_6rem_-_80px)] sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">
+      <div className="flex max-h-[calc(100vh_-_200px)] lg:sticky lg:top-[105px]  lg:translate-x-14">
+        <div className="lg:m-auto">
+          <div className="my-5 hidden justify-center lg:flex ">
+            <Image
+              src="/static/images/logo_icon.svg"
+              alt="Jackpot Logo"
+              width={200}
+              height={200}
+            />
+          </div>
           <h1 className="flex flex-wrap items-center gap-x-3 text-3xl font-semibold">
             Welcome to Jackpot
           </h1>
@@ -79,9 +87,9 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-      <div className="w-full max-w-xl">
-        <div>
-          <h2 className="my-6 text-lg font-medium">
+      <div className="my-auto w-full max-w-xl">
+        <div className="lg:rounded-2xl lg:px-8 lg:py-9 lg:dark:bg-[#0c0c25]">
+          <h2 className="text-xl font-medium">
             Enter your Email and Password to Log in.
           </h2>
           <form
@@ -129,24 +137,9 @@ export default function LoginPage() {
               Log In
             </Button>
           </form>
-        </div>
-        <OrLine />
-        <h2 className="mb-6 text-lg font-medium">Login Using</h2>
-        <div>
-          <Center className="flex flex-col gap-5">
-            <ProviderButton
-              name="Google"
-              type="in"
-              action={() => {}}
-              icon="/static/images/g_logo.svg"
-            />
-            <ProviderButton
-              name="Apple"
-              type="in"
-              action={() => {}}
-              icon="/static/images/apple_logo.svg"
-            />
-          </Center>
+
+          <OrLine />
+          <LoginProviders type="in" />
         </div>
       </div>
     </div>

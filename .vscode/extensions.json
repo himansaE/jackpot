@@ -1,6 +1,5 @@
 {
   "recommendations": [
-    "heybourn.headwind",
     "bradlc.vscode-tailwindcss",
     "ms-vscode.vscode-typescript-next",
     "csstools.postcss"

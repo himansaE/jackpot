@@ -46,14 +46,16 @@ model User {
   Payments      Payments[]
   TicketsToDrow TicketsToDrow[]
   TicketHistory TicketHistory[]
+  Oauth         Oauth[]
 }
 
 model Session {
-  id             String @id @map("_id")
-  user_id        String @db.ObjectId
+  id             String  @id @map("_id")
+  user_id        String  @db.ObjectId
   active_expires BigInt
   idle_expires   BigInt
-  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  oauth_provider String?
+  user           User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 }
 
 model Key {
@@ -61,6 +63,16 @@ model Key {
   hashed_password String?
   user_id         String  @db.ObjectId
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+}
+
+model Oauth {
+  id            String @id @map("_id")
+  provider      String
+  access_token  String
+  refresh_token String
+  email         String
+  user_id       String @db.ObjectId
+  user          User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
 }
 
 model Subscription {

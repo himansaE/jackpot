@@ -1,14 +1,16 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { InputBox } from "@/components/ui/input-box";
-import { OrLine } from "@/components/ui/or-line";
-import Spinner from "@/components/ui/spinner";
+
 import Link from "next/link";
 import { FormEvent, ReactNode, useState } from "react";
 import { ReCaptchaProvider, useReCaptcha } from "next-recaptcha-v3";
 import Image from "next/image";
-import { LoginProviders } from "@/components/login-providers";
+import { Button } from "@/components/ui/button";
+import Center from "@/components/ui/center";
+import { Checkbox } from "@/components/ui/checkbox";
+import { InputBox } from "@/components/ui/input-box";
+import { OrLine } from "@/components/ui/or-line";
+import { ProviderButton } from "@/components/ui/provider-button";
+import Spinner from "@/components/ui/spinner";
 
 type FormData = {
   f_name: string;
@@ -87,7 +89,7 @@ export function Page() {
   };
   return (
     <div className="grid sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">
-      <div className="flex max-h-[calc(100vh_-_200px)] lg:sticky lg:top-[105px] lg:translate-x-14">
+      <div className="flex max-h-[calc(100vh_-_200px)] lg:sticky lg:top-[105px]">
         <div className="lg:m-auto">
           <div className="my-5 hidden justify-center lg:flex ">
             <Image
@@ -113,8 +115,8 @@ export function Page() {
         </div>
       </div>
       <div className="w-full max-w-xl">
-        <div className="lg:rounded-2xl lg:px-8 lg:py-9 lg:dark:bg-[#0c0c25]">
-          <h2 className="text-lg font-medium">
+        <div>
+          <h2 className="my-6 text-lg font-medium">
             Fill This form to complete the Registration
           </h2>
           {error != "" && (
@@ -195,7 +197,23 @@ export function Page() {
           </form>
         </div>
         <OrLine />
-        <LoginProviders type="up" />
+        <div>
+          <h2 className="mb-6 text-lg font-medium">Sign Up Using</h2>
+          <Center className="flex flex-col gap-5">
+            <ProviderButton
+              name="Google"
+              type="up"
+              action={() => {}}
+              icon="/static/images/g_logo.svg"
+            />
+            <ProviderButton
+              name="Apple"
+              type="up"
+              action={() => {}}
+              icon="/static/images/apple_logo.svg"
+            />
+          </Center>
+        </div>
         <p className="mx-2 mt-8 text-xs text-gray-700 dark:text-gray-400 ">
           This site is protected by reCAPTCHA and the Google
           <a
