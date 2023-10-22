@@ -9,8 +9,8 @@ import Center from "@/components/ui/center";
 import { Checkbox } from "@/components/ui/checkbox";
 import { InputBox } from "@/components/ui/input-box";
 import { OrLine } from "@/components/ui/or-line";
-import { ProviderButton } from "@/components/ui/provider-button";
 import Spinner from "@/components/ui/spinner";
+import { LoginProviders } from "@/components/login-providers";
 
 type FormData = {
   f_name: string;
@@ -200,18 +200,7 @@ export function Page() {
         <div>
           <h2 className="mb-6 text-lg font-medium">Sign Up Using</h2>
           <Center className="flex flex-col gap-5">
-            <ProviderButton
-              name="Google"
-              type="up"
-              action={() => {}}
-              icon="/static/images/g_logo.svg"
-            />
-            <ProviderButton
-              name="Apple"
-              type="up"
-              action={() => {}}
-              icon="/static/images/apple_logo.svg"
-            />
+            <LoginProviders type="in" />
           </Center>
         </div>
         <p className="mx-2 mt-8 text-xs text-gray-700 dark:text-gray-400 ">

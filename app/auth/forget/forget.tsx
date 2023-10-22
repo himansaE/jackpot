@@ -1,9 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import Center from "@/components/ui/center";
 import { InputBox } from "@/components/ui/input-box";
-import { OrLine } from "@/components/ui/or-line";
-import { ProviderButton } from "@/components/ui/provider-button";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
 import { FormEvent, ReactNode, useState } from "react";
