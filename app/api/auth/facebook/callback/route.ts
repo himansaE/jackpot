@@ -1,17 +1,16 @@
-// app/login/github/callback/route.ts
-import { auth, googleAuth } from "../../lucia";
 import { NewResponse } from "@/lib/auth";
 import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
-import { createOrValidateGoogleUser } from "@/lib/auth/google";
 import * as context from "next/headers";
+import { auth, facebookAuth } from "../../lucia";
+import { createOrValidateFacebookUser } from "@/lib/auth/facebook";
 
 export const GET = async (request: NextRequest) => {
-  const storedState = cookies().get("google_oauth_state")?.value;
+  const storedState = cookies().get("fb_oauth_state")?.value;
   const url = new URL(request.url);
   const state = url.searchParams.get("state");
   const code = url.searchParams.get("code");
-  const coming_form = cookies().get("google_auth_mode")?.value ?? "";
+  const coming_form = cookies().get("fb_auth_mode")?.value ?? "";
 
   if (coming_form != "0" && coming_form != "1") {
     return NewResponse(null, 400);
@@ -22,15 +21,14 @@ export const GET = async (request: NextRequest) => {
       coming_form == "0" ? "login" : "register"
     }`,
   );
-
-  // validate state
   if (!storedState || !state || storedState !== state || !code) {
     setErrorCookie("Something went wrong. Try again.", context);
     return NewResponse(null, 302, { Location: error_url.href });
   }
+
   try {
-    const user = await createOrValidateGoogleUser(
-      await googleAuth.validateCallback(code),
+    const user = await createOrValidateFacebookUser(
+      await facebookAuth.validateCallback(code),
     );
     if (!user.done) {
       setErrorCookie(user.error, context);

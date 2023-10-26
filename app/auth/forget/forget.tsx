@@ -83,7 +83,7 @@ export function Page(props: { email?: string }) {
         </div>
       </div>
       <div className="flex w-full max-w-xl flex-col justify-center">
-        <div className="lg:rounded-2xl lg:bg-[#0c0c25] lg:px-8 lg:py-9">
+        <div className="lg:rounded-2xl lg:px-8 lg:py-9 lg:dark:bg-[#0c0c25]">
           <h2 className="mb-6 mt-8 text-lg font-medium lg:mt-0">
             Enter your Email to forget password.
           </h2>

@@ -5,28 +5,39 @@ import { InputBox } from "@/components/ui/input-box";
 import { OrLine } from "@/components/ui/or-line";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
-import { FormEvent, ReactNode, useState } from "react";
+import { FormEvent, ReactNode, useEffect, useState } from "react";
 import Image from "next/image";
 import { LoginProviders } from "@/components/login-providers";
+import { deleteCookie, getCookie } from "@/lib/utils";
 
 type FormData = {
   email: string;
   pass: string;
 };
 
-export default function LoginPage() {
+export default function LoginPage({
+  error: default_error,
+}: {
+  error?: string;
+}) {
   const [form_data, setFormData] = useState<FormData>({
     email: "",
     pass: "",
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<ReactNode>("");
+  const [error, setError] = useState<ReactNode>(default_error);
 
   const setValue = (id: keyof FormData, value: string) => {
     setFormData({ ...form_data, [id]: value });
   };
-
+  useEffect(() => {
+    const error = getCookie("auth-error");
+    if (error) {
+      setError(decodeURI(error));
+      deleteCookie("auth-error");
+    }
+  }, []);
   const validate = () => {
     if (form_data.email.trim() != "" || form_data.pass.trim() == "")
       return true;
@@ -119,18 +130,29 @@ export default function LoginPage() {
               disabled={submitting}
             />
 
-            <div className="items-top flex space-x-2">
-              {/* TODO:: Implement remember me functionality */}
-              <Checkbox id="terms1" disabled={submitting} name="remember-me" />
+            <div className="flex justify-between space-x-2">
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="terms1"
+                  disabled={submitting}
+                  name="remember-me"
+                />
 
-              <div className="grid gap-1.5 leading-none">
-                <label
-                  htmlFor="terms1"
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  Remember Me
-                </label>
+                <div className="grid gap-1.5 leading-none">
+                  <label
+                    htmlFor="terms1"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    Remember Me
+                  </label>
+                </div>
               </div>
+              <Link
+                href="/auth/forget"
+                className="justify-between text-sm text-blue-500 underline  dark:text-blue-400"
+              >
+                Forget Password
+              </Link>
             </div>
             <Button className="dark:bg-indigo-700 dark:text-white dark:hover:bg-indigo-800">
               {submitting ? <Spinner /> : <></>}

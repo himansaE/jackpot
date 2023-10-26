@@ -11,7 +11,7 @@ export async function POST(req: Request, res: Response) {
   if (!(await validateRecaptcha(body.token, "register")))
     return NewResponse(
       { done: false, errors: ["Recaptcha validation failed."] },
-      403
+      403,
     );
 
   const validated = validateReqBody(body);
@@ -35,6 +35,7 @@ export async function POST(req: Request, res: Response) {
         last_name: body.last_name,
         phone: body.phone,
         acc_bal: 0,
+        providers: ["email"],
       },
     });
 
@@ -58,7 +59,7 @@ export async function POST(req: Request, res: Response) {
         done: false,
         errors: ["Something went wrong. try login."],
       },
-      500
+      500,
     );
   }
 }

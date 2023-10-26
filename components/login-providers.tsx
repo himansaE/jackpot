@@ -12,10 +12,12 @@ export const LoginProviders = (props: { type: "up" | "in" }) => {
           link="/api/auth/google"
         />
         <ProviderButton
-          name="Apple"
+          name="Facebook"
           type={props.type}
-          icon="/static/images/apple_logo.svg"
+          icon="/static/images/fb_logo.svg"
           link="/api/auth/facebook"
+          bg="#1877F2"
+          text="white"
         />
       </Center>
     </div>

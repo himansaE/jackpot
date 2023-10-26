@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server";
 import { auth } from "../lucia";
 import { NewResponse } from "@/lib/auth";
 
-export const DELETE = async (request: NextRequest) => {
+export const POST = async (request: NextRequest) => {
   const authRequest = auth.handleRequest(request.method, context);
 
   const session = await authRequest.validate();

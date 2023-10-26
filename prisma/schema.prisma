@@ -30,23 +30,23 @@ model TicketResult {
 // user data
 
 model User {
-  id             String  @id @default(auto()) @map("_id") @db.ObjectId
-  email          String  @unique
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  email          String          @unique
   first_name     String
   last_name      String
   phone          String?
-  phoneValidated Boolean @default(false)
-  emailValidated Boolean @default(false)
+  phoneValidated Boolean         @default(false)
+  emailValidated Boolean         @default(false)
   image          String?
-  acc_bal        Int     @default(0)
-
-  auth_session  Session[]
-  key           Key[]
-  Subscription  Subscription[]
-  Payments      Payments[]
-  TicketsToDrow TicketsToDrow[]
-  TicketHistory TicketHistory[]
-  Oauth         Oauth[]
+  acc_bal        Int             @default(0)
+  providers      String[]
+  auth_session   Session[]
+  key            Key[]
+  Subscription   Subscription[]
+  Payments       Payments[]
+  TicketsToDrow  TicketsToDrow[]
+  TicketHistory  TicketHistory[]
+  Oauth          Oauth[]
 }
 
 model Session {

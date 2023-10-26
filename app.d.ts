@@ -11,6 +11,7 @@ declare namespace Lucia {
     emailValidated?: boolean;
     image?: String?;
     acc_bal: number;
+    providers: string[];
   };
   export type Session = {
     user: User;

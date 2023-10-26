@@ -28,6 +28,14 @@ export const formatMilliseconds = (milliseconds: number) => {
   return formattedTime || "0 seconds";
 };
 
+export const joinTextForPara = (text: string[]) => {
+  if (text.length == 1) return text[0];
+  return text.join(" or ");
+};
+
+export const capitalizeFirstLetter = (text: string) => {
+  return text[0].toUpperCase() + text.slice(1);
+};
 export function getNumberWithSuffix(number: number) {
   const suffix = ["th", "st", "nd", "rd"][number % 10] || "th";
   if (number % 100 >= 11 && number % 100 <= 13) {
@@ -35,3 +43,26 @@ export function getNumberWithSuffix(number: number) {
   }
   return suffix;
 }
+export function getCookie(name: string): string | null {
+  const cookie = document.cookie;
+  const cookieIndex = cookie.indexOf(`${name}=`);
+
+  if (cookieIndex !== -1) {
+    return cookie.substring(cookieIndex + name.length + 1);
+  }
+
+  return null;
+}
+export const deleteCookie = (cookieName: string) => {
+  document.cookie =
+    cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+};
+
+export const formatProviders = (name: string) => {
+  const providers = {
+    email: "Email and Password",
+    facebook: "Facebook",
+    google: "Google",
+  };
+  return providers[name as keyof typeof providers];
+};

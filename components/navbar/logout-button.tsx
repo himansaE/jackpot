@@ -13,7 +13,7 @@ export const LogoutButton = () => {
       onClick={async () => {
         if (submitting) return;
         setSubmitting(true);
-        const res = await fetch("/api/auth/logout", { method: "DELETE" })
+        const res = await fetch("/api/auth/logout", { method: "POST" })
           .then((i) => i.json)
           .catch((i) => undefined);
         if (res == undefined) {

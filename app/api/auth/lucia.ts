@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { lucia } from "lucia";
 import { nextjs_future } from "lucia/middleware";
 import { prisma as PrismaAdapter } from "@lucia-auth/adapter-prisma";
-import { google } from "@lucia-auth/oauth/providers";
+import { facebook, google } from "@lucia-auth/oauth/providers";
 export const auth = lucia({
   adapter: PrismaAdapter(prisma),
   env: process.env.NODE_ENV === "development" ? "DEV" : "PROD",
@@ -24,6 +24,12 @@ export const googleAuth = google(auth, {
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
   ],
+});
+export const facebookAuth = facebook(auth, {
+  clientId: process.env.FACEBOOK_CLIENT_ID ?? "",
+  clientSecret: process.env.FACEBOOK_CLIENT_SECRET ?? "",
+  redirectUri: process.env.FACEBOOK_REDIRECT_URL ?? "",
+  scope: ["public_profile", "email"],
 });
 
 export type Auth = typeof auth;

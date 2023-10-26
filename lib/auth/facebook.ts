@@ -1,12 +1,12 @@
-import { GoogleUser } from "@lucia-auth/oauth/providers";
+import { FacebookUser } from "@lucia-auth/oauth/providers";
 import { User } from "lucia";
 import prisma from "../prisma";
-import { ObjectId } from "mongodb";
 import { formatProviders, joinTextForPara } from "../utils";
+import { ObjectId } from "mongodb";
 
 type GetUserProps = {
   getExistingUser: () => Promise<User | null>;
-  googleUser: GoogleUser;
+  facebookUser: FacebookUser;
   createUser: (options: {
     userId?: string | undefined;
     attributes: Lucia.DatabaseUserAttributes;
@@ -23,44 +23,46 @@ type ReturnType =
       error: string;
     };
 
-export const createOrValidateGoogleUser = async ({
+export const createOrValidateFacebookUser = async ({
   getExistingUser,
-  googleUser,
+  facebookUser,
   createUser,
 }: GetUserProps): Promise<ReturnType> => {
+  if (facebookUser.email == undefined)
+    return {
+      error: "Please grant Facebook Email permission to Login",
+      done: false,
+    };
   const existingUser = await getExistingUser();
   if (existingUser)
     return { user: existingUser, done: true as const, new: false };
-
   // check for same email in another provider
   const provider_list = (
     await prisma.user.findFirst({
-      where: { email: googleUser.email },
+      where: { email: facebookUser.email },
     })
   )?.providers;
   if (!provider_list) return { done: false, error: "" };
 
-  // not Registered with Google but else
+  // not Registered with Facebook but else
   if (provider_list.length != 0)
     return {
       done: false as const,
-      error: `Your Google account is not linked to this App. Please log in with ${joinTextForPara(
+      error: `Your Facebook account is not linked to this App. Please log in with ${joinTextForPara(
         provider_list.map((i) => formatProviders(i)),
       )} account you are currently logged in with.`,
     };
-
-  // New email register him
   const userId = new ObjectId().toHexString();
   const user = await createUser({
     userId,
     attributes: {
-      email: googleUser.email ?? "",
-      first_name: googleUser.given_name,
-      last_name: googleUser.family_name,
-      image: googleUser.picture,
+      email: facebookUser.email,
+      first_name: facebookUser.name.split(" ")[0],
+      last_name: facebookUser.name.split(" ")[1] ?? "",
+      image: facebookUser.picture.data.url,
       acc_bal: 0,
       emailValidated: true,
-      providers: ["google"],
+      providers: ["facebook"],
     },
   });
   return { user: user, done: true as const, new: true };
