@@ -1,18 +1,7 @@
 import { auth } from "@/app/api/auth/lucia";
-import { createHash } from "crypto";
 import { LuciaError, Session } from "lucia";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-
-export const validateCsrfToken = (token: string) => {
-  if (typeof token != "string") return false;
-  const delimiter = token.indexOf("|") !== -1 ? "|" : "%7C";
-  const [requestToken, requestHash] = token.split(delimiter);
-  const validate = createHash("sha256")
-    .update(`${requestToken}${process.env.NEXTAUTH_SECRET}`)
-    .digest("hex");
-  return validate === requestHash;
-};
 
 type NewResponseBody =
   | {
@@ -25,7 +14,7 @@ type NewResponseBody =
 export const NewResponse = (
   body: NewResponseBody,
   statusCode?: number,
-  headers?: HeadersInit
+  headers?: HeadersInit,
 ) => {
   return new Response(JSON.stringify(body), {
     status: statusCode,
@@ -43,7 +32,7 @@ export const validateRecaptcha = async (token: string, action?: string) => {
 export const validateSession = async () => {
   try {
     const session = (await auth.getSession(
-      cookies().get("auth_session")?.value ?? ""
+      cookies().get("auth_session")?.value ?? "",
     )) as Session;
     if (session.state === "active") return session;
 
@@ -61,7 +50,7 @@ export const validateSession = async () => {
 export const isLogged = async () => {
   try {
     const session = (await auth.getSession(
-      cookies().get("auth_session")?.value ?? ""
+      cookies().get("auth_session")?.value ?? "",
     )) as Session;
     if (session.state === "active") return true;
     //TODO:: idle session should be reset

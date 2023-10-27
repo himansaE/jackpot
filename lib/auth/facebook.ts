@@ -42,10 +42,9 @@ export const createOrValidateFacebookUser = async ({
       where: { email: facebookUser.email },
     })
   )?.providers;
-  if (!provider_list) return { done: false, error: "" };
 
   // not Registered with Facebook but else
-  if (provider_list.length != 0)
+  if (provider_list && provider_list.length != 0)
     return {
       done: false as const,
       error: `Your Facebook account is not linked to this App. Please log in with ${joinTextForPara(

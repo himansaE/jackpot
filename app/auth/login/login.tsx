@@ -5,39 +5,30 @@ import { InputBox } from "@/components/ui/input-box";
 import { OrLine } from "@/components/ui/or-line";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
-import { FormEvent, ReactNode, useEffect, useState } from "react";
+import { FormEvent, ReactNode, useState } from "react";
 import Image from "next/image";
 import { LoginProviders } from "@/components/login-providers";
-import { deleteCookie, getCookie } from "@/lib/utils";
+import { AuthAction } from "@/lib/auth_action";
+import { ReCaptchaProvider, useReCaptcha } from "next-recaptcha-v3";
 
 type FormData = {
   email: string;
   pass: string;
 };
 
-export default function LoginPage({
-  error: default_error,
-}: {
-  error?: string;
-}) {
+export function Page() {
   const [form_data, setFormData] = useState<FormData>({
     email: "",
     pass: "",
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<ReactNode>(default_error);
+  const [error, setError] = useState<ReactNode>();
 
   const setValue = (id: keyof FormData, value: string) => {
     setFormData({ ...form_data, [id]: value });
   };
-  useEffect(() => {
-    const error = getCookie("auth-error");
-    if (error) {
-      setError(decodeURI(error));
-      deleteCookie("auth-error");
-    }
-  }, []);
+  const { executeRecaptcha } = useReCaptcha();
   const validate = () => {
     if (form_data.email.trim() != "" || form_data.pass.trim() == "")
       return true;
@@ -46,28 +37,16 @@ export default function LoginPage({
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (submitting) return;
-    if (!validate()) return setError("Provide Username and Password to Login.");
-    setSubmitting(true);
-    setError("");
-
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify({
-          email: form_data.email,
-          password: form_data.pass,
-        }),
-      }).then((r) => r.json());
-
-      if (res.done) {
-        return window.location.assign("/dashboard");
-      } else
-        setError(
-          (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>),
-        );
-    } catch {}
-    setSubmitting(false);
+    await AuthAction({
+      setError,
+      setSubmitting,
+      submitting,
+      validate,
+      executeRecaptcha,
+      action_path: "/api/auth/login",
+      recaptcha_name: "login",
+      body: { email: form_data.email, password: form_data.pass },
+    });
   };
 
   return (
@@ -165,5 +144,13 @@ export default function LoginPage({
         </div>
       </div>
     </div>
+  );
+}
+
+export default function RegisterWithCaptcha() {
+  return (
+    <ReCaptchaProvider>
+      <Page />
+    </ReCaptchaProvider>
   );
 }

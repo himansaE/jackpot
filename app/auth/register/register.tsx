@@ -9,6 +9,7 @@ import { FormEvent, ReactNode, useState } from "react";
 import { ReCaptchaProvider, useReCaptcha } from "next-recaptcha-v3";
 import Image from "next/image";
 import { LoginProviders } from "@/components/login-providers";
+import { AuthAction } from "@/lib/auth_action";
 
 type FormData = {
   f_name: string;
@@ -49,41 +50,22 @@ export function Page() {
   };
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (submitting) return;
-    setSubmitting(true);
-    setError("");
-    if (!validate()) return setSubmitting(false);
-    let token;
-    try {
-      token = await executeRecaptcha("register");
-    } catch (err) {}
-
-    if (token == undefined) {
-      setSubmitting(false);
-
-      return setError("Recaptcha has not been loaded. Try reload the page.");
-    }
-    try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify({
-          token,
-          email: form_data.email,
-          first_name: form_data.f_name,
-          last_name: form_data.l_name,
-          password: form_data.pass,
-          phone: form_data.phone,
-        }),
-      }).then((r) => r.json());
-
-      if (res.done) {
-        return window.location.assign("/dashboard");
-      } else
-        setError(
-          (res.errors as string[]).map((i, n) => <div key={n}>{i}</div>),
-        );
-    } catch {}
-    setSubmitting(false);
+    await AuthAction({
+      setError,
+      setSubmitting,
+      submitting,
+      validate,
+      executeRecaptcha,
+      action_path: "/api/auth/register",
+      recaptcha_name: "register",
+      body: {
+        email: form_data.email,
+        first_name: form_data.f_name,
+        last_name: form_data.l_name,
+        password: form_data.pass,
+        phone: form_data.phone,
+      },
+    });
   };
   return (
     <div className="grid sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">

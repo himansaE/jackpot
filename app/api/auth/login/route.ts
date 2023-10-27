@@ -1,4 +1,4 @@
-import { NewResponse } from "@/lib/auth";
+import { NewResponse, validateRecaptcha } from "@/lib/auth";
 import { auth } from "../lucia";
 import * as context from "next/headers";
 import { LuciaError } from "lucia";
@@ -19,11 +19,16 @@ const local_validate = ({ email, password }: ReqBody) => {
 type ReqBody = {
   email: string;
   password: string;
+  token: string;
 };
 
 export async function POST(req: Request, res: Response) {
   const body: ReqBody = await req.json();
-  // TODO :: captcha validation
+  if (!(await validateRecaptcha(body.token, "login")))
+    return NewResponse(
+      { done: false, errors: ["Recaptcha validation failed."] },
+      403,
+    );
 
   const validated = local_validate(body);
   if (typeof validated === "string")
@@ -32,13 +37,13 @@ export async function POST(req: Request, res: Response) {
         done: false,
         errors: [validated],
       },
-      400
+      400,
     );
   try {
     const key = await auth.useKey(
       "email",
       body.email.toLowerCase(),
-      body.password
+      body.password,
     );
     const session = await auth.createSession({
       userId: key.userId,
@@ -59,11 +64,11 @@ export async function POST(req: Request, res: Response) {
           done: false,
           errors: ["Incorrect username or password"],
         },
-        400
+        400,
       );
     return NewResponse(
       { done: false, errors: ["An unknown error occurred"] },
-      500
+      500,
     );
   }
 }

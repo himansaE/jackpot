@@ -29,8 +29,7 @@ export const createOrValidateGoogleUser = async ({
   createUser,
 }: GetUserProps): Promise<ReturnType> => {
   const existingUser = await getExistingUser();
-  if (existingUser)
-    return { user: existingUser, done: true as const, new: false };
+  if (existingUser) return { user: existingUser, done: true, new: false };
 
   // check for same email in another provider
   const provider_list = (
@@ -38,12 +37,12 @@ export const createOrValidateGoogleUser = async ({
       where: { email: googleUser.email },
     })
   )?.providers;
-  if (!provider_list) return { done: false, error: "" };
+  console.log(provider_list);
 
   // not Registered with Google but else
-  if (provider_list.length != 0)
+  if (provider_list && provider_list.length != 0)
     return {
-      done: false as const,
+      done: false,
       error: `Your Google account is not linked to this App. Please log in with ${joinTextForPara(
         provider_list.map((i) => formatProviders(i)),
       )} account you are currently logged in with.`,
@@ -63,5 +62,5 @@ export const createOrValidateGoogleUser = async ({
       providers: ["google"],
     },
   });
-  return { user: user, done: true as const, new: true };
+  return { user: user, done: true, new: true };
 };
