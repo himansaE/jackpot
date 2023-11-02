@@ -18,6 +18,7 @@ export const sendEmail = async (props: SendEmailProps) => {
     });
     return true;
   } catch (e) {
+    // eslint-disable-next-line no-console
     console.error(e);
   }
   return false;

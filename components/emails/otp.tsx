@@ -99,7 +99,7 @@ export const EmailOTPComponent = (props: EmailOTPComponentProps) => {
                                 <a href={`${URLWithParams("/", [])}`}>
                                   <img
                                     src={`${URLWithParams(
-                                      "/static/images/logo_inline.svg",
+                                      "/static/images/logo_inline.png",
                                       [],
                                     )}`}
                                     alt="Jackpot logo"
