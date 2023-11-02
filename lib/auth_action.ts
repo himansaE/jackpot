@@ -1,4 +1,5 @@
-import React, { ReactNode, SetStateAction } from "react";
+import { FormErrorText } from "@/components/ui/form-error-text";
+import { ReactNode, SetStateAction } from "react";
 
 type AuthActionProps = {
   submitting: boolean;
@@ -8,6 +9,7 @@ type AuthActionProps = {
   recaptcha_name: string;
   body: { [key: string]: string };
   executeRecaptcha: (action: string) => Promise<string>;
+  type?: "redirect" | "return";
   action_path: string;
 };
 export const AuthAction = async ({
@@ -19,6 +21,7 @@ export const AuthAction = async ({
   action_path,
   body,
   recaptcha_name,
+  type,
 }: AuthActionProps) => {
   if (submitting) return;
   setSubmitting(true);
@@ -42,15 +45,15 @@ export const AuthAction = async ({
         ...body,
       }),
     }).then((r) => r.json());
-
     if (res.done) {
+      if (type == "return") return res;
       return window.location.assign("/dashboard");
-    } else
-      setError(
-        (res.errors as string[]).map((i, n) =>
-          React.createElement("div", { key: n }, i),
-        ),
-      );
-  } catch {}
+    } else {
+      setError(FormErrorText(res.errors, res.link));
+      if (!res.errors) setError("Something went wrong.");
+    }
+  } catch {
+    setError("Network request failed.");
+  }
   setSubmitting(false);
 };

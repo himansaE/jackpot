@@ -5,7 +5,7 @@ import { InputBox } from "@/components/ui/input-box";
 import { OrLine } from "@/components/ui/or-line";
 import Spinner from "@/components/ui/spinner";
 import Link from "next/link";
-import { FormEvent, ReactNode, useState } from "react";
+import { FormEvent, ReactNode, SetStateAction, useRef, useState } from "react";
 import { ReCaptchaProvider, useReCaptcha } from "next-recaptcha-v3";
 import Image from "next/image";
 import { LoginProviders } from "@/components/login-providers";
@@ -31,12 +31,21 @@ export function Page() {
     pass_conf: "",
   });
 
+  const error_ref = useRef<HTMLDivElement>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<ReactNode>("");
+  const [error, setErrorText] = useState<ReactNode>("");
   const setValue = (id: keyof FormData, value: string) => {
     setFormData({ ...form_data, [id]: value });
   };
 
+  const setError = (text: SetStateAction<ReactNode>) => {
+    if (text != "") {
+      if ((error_ref.current as any)?.scrollIntoViewIfNeeded)
+        (error_ref.current as any)?.scrollIntoViewIfNeeded();
+      else error_ref.current?.scrollIntoView();
+    }
+    setErrorText(text);
+  };
   const validate = () => {
     if (form_data.pass.length < 8) {
       setError("Password must contain at least 8 characters.");
@@ -69,7 +78,7 @@ export function Page() {
   };
   return (
     <div className="grid sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">
-      <div className="flex max-h-[calc(100vh_-_200px)] lg:sticky lg:top-[105px] lg:translate-x-14">
+      <div className="flex max-h-[calc(100vh_-_200px)] w-full max-w-xl lg:sticky lg:top-[105px] lg:translate-x-14">
         <div className="lg:m-auto">
           <div className="my-5 hidden justify-center lg:flex ">
             <Image
@@ -99,11 +108,9 @@ export function Page() {
           <h2 className="text-lg font-medium">
             Fill This form to complete the Registration
           </h2>
-          {error != "" && (
-            <div className="mx-0 my-10 mb-5 rounded-md border border-solid border-[#ff10102e] bg-red-950 px-8 py-2 text-sm text-red-200 md:mx-3">
-              {error}
-            </div>
-          )}
+          <div ref={error_ref}>
+            {error != "" && <div className="my-2 text-red-500">{error}</div>}
+          </div>
           <form className="my-3 flex flex-col gap-5" onSubmit={submit}>
             <div className="flex flex-row gap-3 [&>div]:w-full">
               <InputBox

@@ -16,14 +16,14 @@ type FormData = {
   pass: string;
 };
 
-export function Page() {
+export function Page(props: { error?: string }) {
   const [form_data, setFormData] = useState<FormData>({
     email: "",
     pass: "",
   });
 
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<ReactNode>();
+  const [error, setError] = useState<ReactNode>(props.error);
 
   const setValue = (id: keyof FormData, value: string) => {
     setFormData({ ...form_data, [id]: value });
@@ -51,7 +51,7 @@ export function Page() {
 
   return (
     <div className="grid min-h-[calc(100vh_-_6rem_-_80px)] sm:justify-items-center lg:[grid-template-columns:0.6fr_1fr]">
-      <div className="flex max-h-[calc(100vh_-_200px)] lg:sticky lg:top-[105px]  lg:translate-x-14">
+      <div className="flex max-h-[calc(100vh_-_200px)] w-full max-w-xl  lg:sticky lg:top-[105px] lg:translate-x-14">
         <div className="lg:m-auto">
           <div className="my-5 hidden justify-center lg:flex ">
             <Image
@@ -82,14 +82,13 @@ export function Page() {
           <h2 className="text-xl font-medium">
             Enter your Email and Password to Log in.
           </h2>
+          {error != "" && <div className="text-red-500">{error}</div>}
           <form
             className={`my-3 flex flex-col gap-5 ${
               submitting ? "opacity-80" : ""
             }`}
             onSubmit={submit}
           >
-            {error != "" && <div className="text-red-500">{error}</div>}
-
             <InputBox
               name="Email"
               onChange={(e) => setValue("email", e.target.value)}
@@ -147,7 +146,7 @@ export function Page() {
   );
 }
 
-export default function RegisterWithCaptcha() {
+export default function RegisterWithCaptcha(props: { error?: string }) {
   return (
     <ReCaptchaProvider>
       <Page />

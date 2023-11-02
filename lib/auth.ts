@@ -8,7 +8,11 @@ type NewResponseBody =
       done: true;
       [key: string]: string | boolean;
     }
-  | { done: false; errors: string[] }
+  | {
+      done: false;
+      errors: string[];
+      [key: string]: string | boolean | string[];
+    }
   | null;
 
 export const NewResponse = (

@@ -37,7 +37,6 @@ export const createOrValidateGoogleUser = async ({
       where: { email: googleUser.email },
     })
   )?.providers;
-  console.log(provider_list);
 
   // not Registered with Google but else
   if (provider_list && provider_list.length != 0)

@@ -4,6 +4,7 @@ import { auth } from "../lucia";
 import { ObjectId } from "mongodb";
 import * as context from "next/headers";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
+import prisma from "@/lib/prisma";
 
 export async function POST(req: Request, res: Response) {
   const body: ReqBody = await req.json();
@@ -20,6 +21,19 @@ export async function POST(req: Request, res: Response) {
     return NewResponse({ done: false, errors: validated }, 400);
 
   const userId = new ObjectId().toHexString();
+
+  const existing_user = await prisma.user.findFirst({
+    where: { email: body.email.toLowerCase() },
+  });
+
+  if (existing_user) {
+    if (!("email" in existing_user.providers)) {
+      return NewResponse({
+        done: false,
+        errors: ["Email already exists. Login instead"],
+      });
+    }
+  }
 
   try {
     const user = await auth.createUser({

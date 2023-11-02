@@ -47,6 +47,7 @@ model User {
   TicketsToDrow  TicketsToDrow[]
   TicketHistory  TicketHistory[]
   Oauth          Oauth[]
+  otp            otp[]
 }
 
 model Session {
@@ -63,6 +64,19 @@ model Key {
   hashed_password String?
   user_id         String  @db.ObjectId
   user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
+}
+
+model otp {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  user_id        String   @db.ObjectId
+  otp            String
+  type           String
+  for            String
+  expire         DateTime
+  update_token   String?
+  use_count      Int      @default(0)
+  validate_count Int      @default(0)
+  user           User     @relation(references: [id], fields: [user_id], onDelete: Cascade)
 }
 
 model Oauth {
