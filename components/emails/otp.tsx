@@ -92,8 +92,7 @@ export const EmailOTPComponent = (props: EmailOTPComponentProps) => {
                             <td style={tdStyle}>
                               <div
                                 style={{
-                                  display: "flex",
-                                  justifyContent: "center",
+                                  margin: "20px 0 0 0",
                                 }}
                               >
                                 <a href={`${URLWithParams("/", [])}`}>
@@ -104,7 +103,7 @@ export const EmailOTPComponent = (props: EmailOTPComponentProps) => {
                                     )}`}
                                     alt="Jackpot logo"
                                     width="209"
-                                    height="50"
+                                    height="54"
                                     style={imageStyle}
                                   />
                                 </a>
